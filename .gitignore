@@ -1,2 +1,4 @@
 ansible.cfg
 ansible-role-govc
+build
+mnt

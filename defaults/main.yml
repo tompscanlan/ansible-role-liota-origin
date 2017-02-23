@@ -1,4 +1,12 @@
 ---
 # defaults file for ansible-role-liota
-liota_path: /usr/bin
-liota_verstion: 0.2
+
+# set a specific version.
+# if set to "github", we will install from github
+# using below vars
+liota_version: 0.2
+
+
+liota_install_using_pip: true
+liota_github_url: git+https://github.com/vmware/liota.git
+liota_github_branch: master
