@@ -1,7 +1,6 @@
 # Copyright © 2017 VMware, Inc. All Rights Reserved.
 # SPDX-License-Identifier: MIT
+---
 
-ansible.cfg
-ansible-role-govc
-build
-mnt
+- name: restart liotad
+  action: service name=liotad state=restarted

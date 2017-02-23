@@ -1,32 +1,61 @@
-
-
 # ansible-role-liota
 
-## Overview
+Install and manage Liota (Little Internet Of Things Agent)
 
-## Try it out
+## Requirements
 
-### Prerequisites
+Must have pip installed.
 
-* Prereq 1
-* Prereq 2
-* Prereq 3
+## Role Variables
 
-### Build & Run
+Check [vars/default.yml](vars/default.yml) for details on available vars.
 
-1. Step 1
-2. Step 2
-3. Step 3
+## Example Playbook
 
-## Documentation
+```yaml
 
-## Releases & Major Branches
+---
+- name: Install Liota From github
+  hosts: liota
+  roles:
+    - liota
+  vars:
+    liota_pip_extra_args: -U
 
-## Contributing
+    liota_github_url: git+https://github.com/tompscanlan/liota.git
+    liota_github_branch: systemd-units
+    liota_version: github
 
-The ansible-role-liota project team welcomes contributions from the community. If you wish to contribute code and you have not
-signed our contributor license agreement (CLA), our bot will update the issue when you open a Pull Request. For any
-questions about the CLA process, please refer to our [FAQ](https://cla.vmware.com/faq). For more detailed information,
-refer to [CONTRIBUTING.md](CONTRIBUTING.md).
+- name: Install Liota public package
+  hosts: liota
+  roles:
+    - liota
+  vars:
+    liota_pip_extra_args: -U
+    liota_version: 0.2
+
+- name: Uninstall and Install Liota various ways
+  hosts: liota
+  roles:
+    - { role: liota, liota_state: absent }
+    - { role: liota, liota_version: 0.2 }
+    - { role: liota, liota_state: absent }
+    - liota
+  vars:
+    liota_github_url: git+https://github.com/tompscanlan/liota.git
+    liota_github_branch: systemd-units
+    liota_version: github
+
+```
 
 ## License
+
+Copyright © 2017 VMware, Inc. All Rights Reserved.
+SPDX-License-Identifier: MIT
+
+
+## Author Information
+
+Tom Scanlan
+tscanlan@vmware.com
+tompscanlan@gmail.com

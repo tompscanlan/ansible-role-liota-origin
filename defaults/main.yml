@@ -1,0 +1,28 @@
+# Copyright © 2017 VMware, Inc. All Rights Reserved.
+# SPDX-License-Identifier: MIT
+---
+# defaults file for ansible-role-liota
+
+liota_state: present
+
+# might want to set --prefix or --target, so allow passing args to pip
+liota_pip_extra_args:
+
+# set a specific version.
+# if set to "github", we will install from github
+# liota_version: github
+
+# otherwise, install the public version listed here
+liota_version: 0.2.1
+
+# if installing via github, use this repository and branch
+liota_github_url: git+https://github.com/vmware/liota.git
+liota_github_branch: master
+
+liota_script_dir: /etc/liota/scripts
+liota_config_dir: /etc/liota/conf
+liota_log_dir: /var/log/liota
+liota_package_dir: /etc/liota/packages
+liota_tmp_dir: /var/tmp/liota
+
+liota_log_level: INFO

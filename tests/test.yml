@@ -1,0 +1,13 @@
+# Copyright © 2017 VMware, Inc. All Rights Reserved.
+# SPDX-License-Identifier: MIT
+
+---
+- hosts: localhost
+  remote_user: root
+  roles:
+    - { role: ansible-role-liota, liota_state: absent }
+    - { role: ansible-role-liota, liota_github_url: "git+https://github.com/tompscanlan/liota.git", liota_github_branch: ansilble-working, liota_version: github }
+    - { role: ansible-role-liota, liota_state: absent }
+    # currently a bug in README prevents this from working under photon
+    # - ansible-role-liota
+    # - { role: ansible-role-liota, liota_github_url: "git+https://github.com/vmware/liota.git", liota_github_branch: master, liota_version: github }

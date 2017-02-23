@@ -1,0 +1,72 @@
+# Copyright © 2017 VMware, Inc. All Rights Reserved.
+# SPDX-License-Identifier: MIT
+---
+
+- block:
+  - name: Uninstall Liota using pip package
+    pip:
+      name: liota
+      state: "{{ liota_state }}"
+
+  - name: Disable Liota service
+    service:
+      name: liotad
+      enabled: no
+      state: stopped
+    register: service_result
+    ignore_errors: True
+
+#  - debug: msg="{{ service_result }}"
+  - name: Ignore known errors
+    fail: msg="problem removing liotad service"
+    when: >
+      service_result is defined
+      and 'Could not find the requested service' not in service_result.msg
+      and 'no service or tool found' not in service_result.msg
+
+  when: liota_state == 'absent'
+
+
+- block:
+  - name: install Liota using pip package
+    pip:
+      name: liota
+      version: "{{ liota_version }}"
+      extra_args: "{{ liota_pip_extra_args }}"
+      editable: false
+      state: "{{ liota_state }}"
+    when: liota_version != 'github'
+
+  - name: install Liota using pip from github
+    pip:
+      name: "{{ liota_github_url }}@{{ liota_github_branch }}"
+      extra_args: "{{ liota_pip_extra_args }}"
+      editable: false
+      state: "{{ liota_state }}"
+    when: liota_version == 'github'
+
+  - name: Check if path exists
+    stat: path=/etc/init.d
+    register: check_path
+
+  - name: Copy startup script into place if dir exists
+    shell: "cp {{ liota_script_dir }}/autostartliota /etc/init.d/liotad"
+    when: check_path.stat.exists
+
+  - name: Enable Liota Service
+    service:
+      name: liotad
+      enabled: yes
+      state: started
+    register: service_result
+    ignore_errors: True
+
+#  - debug: msg="{{ service_result }}"
+  - name: Ignore known errors
+    fail: msg="problem enabling liotad service"
+    when: "service_result is defined and 'no service or tool found' not in service_result.msg"
+
+  - include: config.yml
+
+  when: liota_state != 'absent'
+
