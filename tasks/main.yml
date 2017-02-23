@@ -2,14 +2,14 @@
 # tasks file for ansible-role-liota
 
 - name: install Liota using pip package
-  become: true
   pip:
     name: liota
     version: "{{ liota_version }}"
+    extra_args: "{{ liota_pip_extra_args }}"
   when: liota_version != 'github'
 
 - name: install Liota using pip from github
-  become: true
   pip:
     name: "{{ liota_github_url }}@{{ liota_github_branch }}"
+    extra_args: "{{ liota_pip_extra_args }}"
   when: liota_version == 'github'
