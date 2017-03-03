@@ -18,7 +18,10 @@
 #  - debug: msg="{{ service_result }}"
   - name: Ignore known errors
     fail: msg="problem removing liotad service"
-    when: "service_result is defined and 'Could not find the requested service' not in service_result.msg"
+    when: >
+      service_result is defined
+      and 'Could not find the requested service' not in service_result.msg
+      and 'no service or tool found' not in service_result.msg
 
   when: liota_state == 'absent'
 

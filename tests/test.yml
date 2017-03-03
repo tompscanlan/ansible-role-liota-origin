@@ -2,5 +2,8 @@
 - hosts: localhost
   remote_user: root
   roles:
-    - { role: ansible-role-liota, liota_path: /tmp}
-
+    - ansible-role-liota
+    - { role: ansible-role-liota, liota_state: absent }
+    - { role: ansible-role-liota, liota_version: 0.2 }
+    - { role: ansible-role-liota, liota_state: absent }
+    - { role: ansible-role-liota, liota_github_url: "git+https://github.com/tompscanlan/liota.git", liota_github_branch: master, liota_version: github }
