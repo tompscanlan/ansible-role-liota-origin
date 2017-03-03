@@ -1,15 +1,18 @@
 ---
 # defaults file for ansible-role-liota
 
-# might want to set --prefix or --target
+liota_state: present
+
+# might want to set --prefix or --target, so allow passing args to pip
 liota_pip_extra_args:
 
 # set a specific version.
 # if set to "github", we will install from github
-# using below vars
+# liota_version: github
+
+# otherwise, install the public version listed here
 liota_version: 0.2
 
-
-liota_install_using_pip: true
+# if installing via github, use this repository and branch
 liota_github_url: git+https://github.com/vmware/liota.git
 liota_github_branch: master

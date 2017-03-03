@@ -1,15 +1,49 @@
 ---
 # tasks file for ansible-role-liota
 
-- name: install Liota using pip package
-  pip:
-    name: liota
-    version: "{{ liota_version }}"
-    extra_args: "{{ liota_pip_extra_args }}"
-  when: liota_version != 'github'
+- block:
+  - name: Uninstall Liota using pip package
+    pip:
+      name: liota
+      state: "{{ liota_state }}"
 
-- name: install Liota using pip from github
-  pip:
-    name: "{{ liota_github_url }}@{{ liota_github_branch }}"
-    extra_args: "{{ liota_pip_extra_args }}"
-  when: liota_version == 'github'
+  - name: Disable Liota service
+    service:
+      name: liotad
+      enabled: no
+      state: stopped
+    register: service_result
+    ignore_errors: True
+
+#  - debug: msg="{{ service_result }}"
+  - name: Ignore known errors
+    fail: msg="problem removing liotad service"
+    when: "service_result is defined and 'Could not find the requested service' not in service_result.msg"
+
+  when: liota_state == 'absent'
+
+- block:
+  - name: install Liota using pip package
+    pip:
+      name: liota
+      version: "{{ liota_version }}"
+      extra_args: "{{ liota_pip_extra_args }}"
+      editable: false
+      state: "{{ liota_state }}"
+    when: liota_version != 'github'
+
+  - name: install Liota using pip from github
+    pip:
+      name: "{{ liota_github_url }}@{{ liota_github_branch }}"
+      extra_args: "{{ liota_pip_extra_args }}"
+      editable: false
+      state: "{{ liota_state }}"
+    when: liota_version == 'github'
+
+  - name: Enable Liota Service
+    service:
+      name: liotad
+      enabled: yes
+      state: started
+
+  when: liota_state != 'absent'
