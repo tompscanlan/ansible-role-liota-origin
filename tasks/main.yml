@@ -25,6 +25,7 @@
 
   when: liota_state == 'absent'
 
+
 - block:
   - name: install Liota using pip package
     pip:
@@ -43,6 +44,14 @@
       state: "{{ liota_state }}"
     when: liota_version == 'github'
 
+  - name: Check if path exists
+    stat: path=/etc/init.d
+    register: check_path
+
+  - name: Copy startup script into place if dir exists
+    shell: "cp {{ liota_script_dir }}/autostartliota /etc/init.d/liotad"
+    when: check_path.stat.exists
+
   - name: Enable Liota Service
     service:
       name: liotad
@@ -53,7 +62,7 @@
 
 #  - debug: msg="{{ service_result }}"
   - name: Ignore known errors
-    fail: msg="problem removing liotad service"
+    fail: msg="problem enabling liotad service"
     when: "service_result is defined and 'no service or tool found' not in service_result.msg"
 
   - include: config.yml
