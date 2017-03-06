@@ -11,7 +11,7 @@ liota_pip_extra_args:
 # liota_version: github
 
 # otherwise, install the public version listed here
-liota_version: 0.2
+liota_version: 0.2.1
 
 # if installing via github, use this repository and branch
 liota_github_url: git+https://github.com/vmware/liota.git
