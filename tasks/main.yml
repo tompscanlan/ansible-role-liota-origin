@@ -56,4 +56,7 @@
     fail: msg="problem removing liotad service"
     when: "service_result is defined and 'no service or tool found' not in service_result.msg"
 
+  - include: config.yml
+
   when: liota_state != 'absent'
+

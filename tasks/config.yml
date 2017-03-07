@@ -1,0 +1,19 @@
+---
+
+- name: configure logging
+  template:
+    src: logging.json.j2
+    dest: "{{ liota_config_dir }}/logging.json"
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart liotad
+
+- name: configure liota.conf
+  template:
+    src: liota.conf.j2
+    dest: "{{ liota_config_dir }}/liota.conf"
+    owner: root
+    group: root
+    mode: 0750
+  notify: restart liotad

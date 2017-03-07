@@ -16,3 +16,10 @@ liota_version: 0.2
 # if installing via github, use this repository and branch
 liota_github_url: git+https://github.com/vmware/liota.git
 liota_github_branch: master
+
+liota_config_dir: /etc/liota/conf
+liota_log_dir: /var/log/liota
+liota_package_dir: /etc/liota/packages
+liota_tmp_dir: /var/tmp/liota
+
+liota_log_level: INFO

@@ -1,0 +1,37 @@
+{
+    "version": 1,
+    "disable_existing_loggers": false,
+    "formatters": {
+        "simple": {
+            "format": "%(asctime)s %(process)d %(levelname)s [%(threadName)s] %(name)s.%(funcName)s(%(lineno)d) - %(message)s",
+            "datefmt" : "%Y-%m-%d %H:%M:%S %Z"
+        }
+    },
+
+    "handlers": {
+
+        "default_file_handler": {
+            "class": "logging.handlers.RotatingFileHandler",
+            "formatter": "simple",
+            "filename": "{{ liota_log_dir }}/liota.log",
+            "maxBytes": 10485760,
+            "backupCount": 5,
+            "encoding": "utf8"
+        },
+
+        "error_file_handler": {
+            "class": "logging.handlers.RotatingFileHandler",
+            "level": "ERROR",
+            "formatter": "simple",
+            "filename": "{{ liota_log_dir }}/liota.errors.log",
+            "maxBytes": 10485760,
+            "backupCount": 5,
+            "encoding": "utf8"
+        }
+    },
+
+    "root": {
+        "level": "{{ liota_log_level }}",
+        "handlers": ["default_file_handler", "error_file_handler"]
+    }
+}
