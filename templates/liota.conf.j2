@@ -1,0 +1,60 @@
+[LOG_CFG]
+json_path = {{ liota_config_dir }}/logging.json
+
+[LOG_PATH]
+log_path = {{ liota_log_dir }}
+
+[UUID_PATH]
+uuid_path = {{ liota_config_dir }}/uuid.ini
+
+[IOTCC_PATH]
+dev_file_path = {{ liota_config_dir }}/devs
+entity_file_path = {{ liota_config_dir }}/entity
+
+[CORE_CFG]
+collect_thread_pool_size = 30
+
+[PKG_CFG]
+pkg_path = {{ liota_package_dir }}
+pkg_msg_pipe = {{ liota_tmp_dir }}/package_messenger.fifo
+pkg_list = {{ liota_package_dir }}/packages_auto.txt
+
+[DISC_CFG]
+disc_cmd_msg_pipe = {{ liota_tmp_dir }}/disc_cmd_messenger.fifo
+
+[DEVICE_TYPE_TO_UNIQUEKEY_MAPPING]
+Press64 = serial
+LM35 = SN
+Apple56 = SN
+Banana23 = serial
+
+[DEVICE_TYPE_TO_DCC_MAPPING]
+LM35 = Graphite-pkg.py, IOTCC-pkg.py
+Press64 = IOTCC-pkg1.py
+Apple56 = IOTCC-pkg2.py
+Banana23 = IOTCC-pkg3.py
+
+[DEVSIM_CFG]
+devsim_cmd_msg_pipe = {{ liota_tmp_dir }}/devsim_cmd_messenger.fifo
+
+[DISC_ENDPOINT_LIST]
+disc_msg_pipe = {{ liota_tmp_dir }}/discovery_messenger.fifo
+socket = 127.0.0.1:5000
+
+[DISC_MQTT_CFG]
+broker_root_ca_cert = {{ liota_package_dir }}/dev_disc/certs/ca.crt
+broker_username = None
+broker_password = None
+edge_system_cert_file = {{ liota_package_dir }}/dev_disc/certs/client.crt
+edge_system_key_file = {{ liota_package_dir }}/dev_disc/certs/client.key
+cert_required = CERT_NONE
+tls_version = None
+userdata = None
+protocol = MQTTv311
+transport = tcp
+cipher = None
+in_flight = 20
+queue_size = 0
+retry = 5
+keep_alive = 60
+ConnectDisconnectTimeout = 10

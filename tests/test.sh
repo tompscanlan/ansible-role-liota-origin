@@ -1,15 +1,57 @@
 #!/bin/bash
-set -x
+
 set -e
-id=$( docker run  --rm  -d -v "$PWD:/mnt" ansible/ansible:ubuntu1204 sleep 10000 )
+set -x
 
-docker exec -it $id bash -c 'pip install -U pip;'
+containers=(
+    "ansible/ansible:ubuntu1204"
+    "tompscanlan/photon-ansible-base"
+    "ansible/ansible:fedora24"
+    "ansible/ansible:ubuntu1604"
+    "ansible/ansible:opensuse42.2"
+    "ansible/ansible:centos7"
+    )
+inits=(
+    "/sbin/init"
+    "/usr/lib/systemd/systemd"
+    "/usr/lib/systemd/systemd"
+    "/lib/systemd/systemd"
+    "/usr/lib/systemd/systemd"
+    "/usr/lib/systemd/systemd"
+)
+options=(
+    ""
+    "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
+    "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
+    "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
+    "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
+    "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
+)
 
-docker exec -it $id bash -c '
-	pip install ansible;
-	ln -s /mnt /ansible-role-liota;
-	cd /ansible-role-liota;
-	printf '[defaults]\\\\nroles_path=/:../:.' >ansible.cfg ;
-	ansible-playbook tests/test.yml -i tests/inventory --syntax-check &&
-	ansible-playbook tests/test.yml -i tests/inventory'
-docker kill $id
+cleanup() {
+    echo "Failed tests on $container"
+
+    docker kill "$(cat ${container_id})"
+}
+
+trap cleanup EXIT
+
+for ((i=0;i<${#containers[@]};++i)); do
+
+    container="${containers[i]}"
+    init="${inits[i]}"
+    option="${options[i]}"
+    container_id=$(mktemp)
+
+    docker run  --rm  -d $option -v "$PWD:/etc/ansible/roles/ansible-role-liota" "$container" "$init" > "${container_id}"
+
+    docker exec "$(cat ${container_id})" bash -c 'pip install -U pip;'
+
+    docker exec "$(cat ${container_id})" bash -c 'pip install ansible;'
+    docker exec "$(cat ${container_id})" bash -c 'ansible-playbook /etc/ansible/roles/ansible-role-liota/tests/test.yml --syntax-check'
+    docker exec "$(cat ${container_id})" bash -c 'ansible-playbook /etc/ansible/roles/ansible-role-liota/tests/test.yml;'
+    docker kill "$(cat ${container_id})"
+done
+
+trap - EXIT
+
