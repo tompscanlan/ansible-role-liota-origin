@@ -6,7 +6,7 @@ Install and manage the "Little Internet Of Things Agent"
 Requirements
 ------------
 
-None
+Must have pip installed.
 
 Role Variables
 --------------
@@ -61,8 +61,7 @@ Including an example of how to use your role (for instance, with variables passe
 
 License
 -------
-
-Copyright © 2017 VMware, Inc. All Rights Reserved.
+MIT
 
 
 Author Information
@@ -71,3 +70,6 @@ Author Information
 Tom Scanlan
 tscanlan@vmware.com
 tompscanlan@gmail.com
+
+Copyright © 2017 VMware, Inc. All Rights Reserved.
+SPDX-License-Identifier: MIT
