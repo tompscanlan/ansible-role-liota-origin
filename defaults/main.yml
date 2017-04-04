@@ -5,6 +5,9 @@
 
 liota_state: present
 
+# enable to debug ansible role
+liota_debug_ansible: false
+
 # might want to set --prefix or --target, so allow passing args to pip
 liota_pip_extra_args:
 
