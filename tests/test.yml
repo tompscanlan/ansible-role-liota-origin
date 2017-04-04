@@ -6,8 +6,13 @@
   remote_user: root
   roles:
     - { role: ansible-role-liota, liota_state: absent }
-    - { role: ansible-role-liota, liota_github_url: "git+https://github.com/tompscanlan/liota.git", liota_github_branch: ansilble-working, liota_version: github }
-    - { role: ansible-role-liota, liota_state: absent }
+
     # currently a bug in README prevents this from working under photon
+    - { role: ansible-role-liota, liota_github_url: "git+https://github.com/tompscanlan/liota.git", liota_github_branch: fix-smartquotes, liota_version: github, when: ansible_distribution == 'VMware Photon' }
+    - { role: ansible-role-liota, liota_github_url: "git+https://github.com/vmware/liota.git", liota_github_branch: master, liota_version: github, when: ansible_distribution != 'VMware Photon'}
+    - { role: ansible-role-liota, liota_state: absent, when: ansible_distribution != 'VMware Photon' }
+
+    # currently a bug in README prevents this from working under photon
+    - { role: ansible-role-liota, liota_version: "0.2.2",   when: ansible_distribution != 'VMware Photon' }
     # - ansible-role-liota
     # - { role: ansible-role-liota, liota_github_url: "git+https://github.com/vmware/liota.git", liota_github_branch: master, liota_version: github }
