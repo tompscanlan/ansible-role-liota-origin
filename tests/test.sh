@@ -34,7 +34,8 @@ options=(
 cleanup() {
     echo "Failed tests on $container"
 
-    docker kill "$(cat ${container_id})"
+    # commenting this, so failures can be debugged
+    #docker kill "$(cat ${container_id})"
 }
 
 trap cleanup EXIT

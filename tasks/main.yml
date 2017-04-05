@@ -16,11 +16,14 @@
     register: service_result
     ignore_errors: True
 
-#  - debug: msg="{{ service_result }}"
+  - debug: msg="{{ service_result }}"
+    when: liota_debug_ansible
+
   - name: Ignore known errors
     fail: msg="problem removing liotad service"
     when: >
       service_result is defined
+      and service_result.msg is defined
       and 'Could not find the requested service' not in service_result.msg
       and 'no service or tool found' not in service_result.msg
 
@@ -61,10 +64,16 @@
     register: service_result
     ignore_errors: True
 
-#  - debug: msg="{{ service_result }}"
+  - debug: msg="{{ service_result }}"
+    when: liota_debug_ansible
+
   - name: Ignore known errors
     fail: msg="problem enabling liotad service"
-    when: "service_result is defined and 'no service or tool found' not in service_result.msg"
+    when: >
+      service_result is defined
+      and service_result.msg is defined
+      and 'not find the requested service' not in service_result.msg
+      and 'no service or tool found' not in service_result.msg
 
   - include: config.yml
 

@@ -3,4 +3,20 @@
 ---
 
 - name: restart liotad
-  action: service name=liotad state=restarted
+  service:
+    name: liotad
+    state: restarted
+  register: service_result
+  ignore_errors: True
+
+- debug: msg="{{ service_result }}"
+  when: liota_debug_ansible
+
+- name: Ignore known errors
+  fail: msg="problem restarting liotad service"
+  when: >
+    service_result is defined
+    and service_result.msg is defined
+    and 'not find the requested service' not in service_result.msg
+    and 'no service or tool found' not in service_result.msg
+
